@@ -2,9 +2,9 @@ import React, {useState, useEffect} from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Card from './components/Card.tsx';
-import RickAndMorty from './components/RickAndMorty.tsx'
+import RickAndMorty from './components/RickAndMorty'
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCharacters } from './store/action.ts';
+import { fetchCharacters } from './store/action';
 
 const App = () => {
   const dispatch = useDispatch();

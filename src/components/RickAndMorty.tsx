@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import './../App.css'
 import {Form, Button} from  'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Pagination from './Pagination.tsx';
+import Pagination from './Pagination';
 import { Link } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar'
 import Container from 'react-bootstrap/Container'
