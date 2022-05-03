@@ -1,13 +1,18 @@
-import React from 'react'
+import {FC} from 'react';
 
-const Pagination = ({postsPerPage, totalPosts, paginate}) => {
+type Props = {
+    postsPerPage: any,
+    totalPosts: any,
+    paginate: any
+}
+const Pagination:FC<Props> = ({postsPerPage, totalPosts, paginate}) => {
     const pageNumbers = [];
 
     for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage);i++){
         pageNumbers.push(i);
     }
 
-    const linkHandler = (number) => {
+    const linkHandler = (number:number) => {
         paginate(number);
     }
 

@@ -1,4 +1,4 @@
-import {FETCH_CHARACTERS, SEARCH_CHARACTERS, MALE_CHECKBOX, FEMALE_CHECKBOX, ALIVE_CHECKBOX,DEAD_CHECKBOX,UNKNOWN_CHECKBOX} from '../types'
+import {FETCH_CHARACTERS, SEARCH_CHARACTERS, MALE_CHECKBOX, FEMALE_CHECKBOX, ALIVE_CHECKBOX, DEAD_CHECKBOX, UNKNOWN_CHECKBOX } from "../types";
 
 interface CharactersState{
     characters: Array<any>,
@@ -10,7 +10,7 @@ const initialState : CharactersState = {
     isLoading:false
 }
 
-export const charactersReducer = (state = initialState, action) => {
+export const charactersReducer = (state = initialState, action:any) => {
     switch (action.type){
         case FETCH_CHARACTERS:
             return {
@@ -27,23 +27,23 @@ export const charactersReducer = (state = initialState, action) => {
             break;
         case MALE_CHECKBOX:
             return {
-                ...state, characters:action.payload.filter(item => item.gender === "Male")
+                ...state, characters:action.payload.filter((item:any) => item.gender === "Male")
             }
         case FEMALE_CHECKBOX: 
             return {
-                ...state, characters:action.payload.filter(item => item.gender === "Female")
+                ...state, characters:action.payload.filter((item:any) => item.gender === "Female")
             }
         case ALIVE_CHECKBOX:
             return {
-                ...state, characters:action.payload.filter(item => item.status === "Alive")
+                ...state, characters:action.payload.filter((item:any) => item.status === "Alive")
             }       
         case DEAD_CHECKBOX:
             return {
-                ...state, characters:action.payload.filter(item => item.status === "Dead")
+                ...state, characters:action.payload.filter((item:any) => item.status === "Dead")
             } 
         case UNKNOWN_CHECKBOX:
             return {
-                ...state, characters:action.payload.filter(item => item.status === "unknown")
+                ...state, characters:action.payload.filter((item:any) => item.status === "unknown")
             } 
         default:
             return state;

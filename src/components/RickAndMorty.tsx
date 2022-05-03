@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState, FC} from 'react';
 import './../App.css'
 import {Form, Button} from  'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -6,8 +6,12 @@ import Pagination from './Pagination';
 import { Link } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar'
 import Container from 'react-bootstrap/Container'
-
-export const RickAndMorty = ({data, loading}) => {
+import Card from "./Card";
+type Props = {
+    data: any,
+    loading: boolean
+}
+ const RickAndMorty:FC<Props> = ({data, loading}) => {
   const [inputText, setInputText] = useState('');
   const [selectedPersons, setSelectedPersons] = useState(data);
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,7 +24,7 @@ export const RickAndMorty = ({data, loading}) => {
   const [unknownCheckbox, setUnknownCheckbox] = useState(false);
 
   const searchHandler = () => {
-    setSelectedPersons(data.filter(item => item.name.toLowerCase().includes(inputText.toLowerCase())));
+    setSelectedPersons(data.filter((item:any) => item.name.toLowerCase().includes(inputText.toLowerCase())));
   }
 
   
@@ -28,7 +32,7 @@ export const RickAndMorty = ({data, loading}) => {
   const indexOfFirstPost = indexOfLastPost - postsPerPage; 
   const currentPosts = selectedPersons.slice(indexOfFirstPost, indexOfLastPost) 
 
-  const checkboxFilter = (type) => {
+  const checkboxFilter = (type:any) => {
     if (type === "male"){
       setMaleCheckbox(!maleCheckbox);
       setFemaleCheckbox(false);
@@ -36,7 +40,7 @@ export const RickAndMorty = ({data, loading}) => {
       setDeadCheckbox(false);
       setUnknownCheckbox(false);
       if (!maleCheckbox){
-        setSelectedPersons(data.filter(item => item.gender === 'Male'))
+        setSelectedPersons(data.filter((item:any) => item.gender === 'Male'))
       }else{
         setSelectedPersons(data)
       }
@@ -47,7 +51,7 @@ export const RickAndMorty = ({data, loading}) => {
       setDeadCheckbox(false);
       setUnknownCheckbox(false);
       if (!femaleCheckbox){
-        setSelectedPersons(data.filter(item => item.gender === 'Female'))
+        setSelectedPersons(data.filter((item:any) => item.gender === 'Female'))
       }else{
         setSelectedPersons(data)
       }
@@ -59,7 +63,7 @@ export const RickAndMorty = ({data, loading}) => {
       setFemaleCheckbox(false); 
 
       if (!aliveCheckbox){
-        setSelectedPersons(data.filter(item => item.status === 'Alive'));
+        setSelectedPersons(data.filter((item:any) => item.status === 'Alive'));
       }else{
         setSelectedPersons(data)
       }
@@ -71,7 +75,7 @@ export const RickAndMorty = ({data, loading}) => {
       setAliveCheckbox(false);
 
       if (!deadCheckbox){
-        setSelectedPersons(data.filter(item => item.status === 'Dead'));
+        setSelectedPersons(data.filter((item:any) => item.status === 'Dead'));
       }else{
         setSelectedPersons(data)
       }
@@ -85,14 +89,14 @@ export const RickAndMorty = ({data, loading}) => {
 
 
       if (!unknownCheckbox){
-        setSelectedPersons(data.filter(item => item.status === 'unknown'));
+        setSelectedPersons(data.filter((item:any) => item.status === 'unknown'));
       }else{
         setSelectedPersons(data)
       }
     }
   }
 
-  const paginate = (pageNumber) => {
+  const paginate = (pageNumber:number) => {
     setCurrentPage(pageNumber)
   }
   
@@ -140,7 +144,7 @@ export const RickAndMorty = ({data, loading}) => {
         </div>
       <div className="cards">
       {
-        currentPosts.map(item => {
+        currentPosts.map((item:any) => {
           return (
             <Link to={`/card/${item.id}`} style={{textDecoration: 'none'}}>
               <div key={item.id} className="card">
@@ -171,4 +175,4 @@ export const RickAndMorty = ({data, loading}) => {
   )
 }
 
-export default RickAndMorty;
+export default RickAndMorty

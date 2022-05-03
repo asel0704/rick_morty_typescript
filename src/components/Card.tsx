@@ -1,12 +1,17 @@
-import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 import './../App.css'
 import Navbar from 'react-bootstrap/Navbar'
 import Container from 'react-bootstrap/Container'
-
-const Card = ({data}) => {
+import {FC} from "react";
+type Props = {
+    data:any
+}
+const Card:FC<Props> = ({data}) => {
     const {id} = useParams();
-    const item = data[id-1];
+    let item = null;
+    if(id !== undefined){
+       item = data[id+1]
+    }
   return (
       <>
       
@@ -28,35 +33,37 @@ const Card = ({data}) => {
       <div style={{textAlign: 'center'}} className="pt-3">
       <Link to="/" >Go to main page</Link> 
       </div>
-    <div className="card__section">
+          {item !== null ?(
+           <div className="card__section">
     <div key={item.id} className="card">
         <div className="card__name">
             {item.name}
         </div>
         <div className="card__img">
             <img src={item.image} />
-        </div> 
+        </div>
         <p className="card__status" style={{background: item.status === "Alive" ? "green" : item.status === "Dead" ? "red" : "grey", color:"white", fontWeight:700}}>
-            {
-                item.status
-            }
+            {item.status}
         </p>
         <div className="card__gender">
-            <b>Gender :</b> {item.gender} 
+            <b>Gender :</b> {item.gender}
         </div>
         <div className="card__location">
-            <b>Location :</b> {item.location.name}  
+            <b>Location :</b> {item.location.name}
         </div>
         <div className="card__origin">
-            <b>Origin :</b> {item.origin.name} 
+            <b>Origin :</b> {item.origin.name}
         </div>
         <div className="card__species">
-            <b>Species :</b> {item.species} 
+            <b>Species :</b> {item.species}
         </div>
     </div>
-    
-    </div>
-    
+    </div>)
+          :
+            (
+            <></>
+            )
+      }
     </>
   )
 }
