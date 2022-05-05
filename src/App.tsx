@@ -1,40 +1,29 @@
 import {useEffect, useState} from 'react';
-import { Route, Routes } from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 import './App.css';
 import Card from './components/Card'
 import RickAndMorty from "./components/RickAndMorty";
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchCharacters } from './store/action';
+import {useSelector, useDispatch} from 'react-redux';
+import {useCharacterActions} from "./hooks/useCharacterActions";
 
 const App = () => {
-  const dispatch = useDispatch();
-  // const characters = useSelector(state => state.characters.characters);
-  // const loading = useSelector(state =>  state.characters.isLoading)
-  const [characters, setCharacters ] = useState([])
-  const [loading, setLoading ] = useState(false)
-  console.log(characters)
-
-  useEffect(() => {
-    fetch('https://rickandmortyapi.com/api/character').then(response => {
-      if (response.ok){
-          return response.json();
-      }
-      throw response;
-      }).then(data => {
-        setCharacters(data.results)
-        setLoading(true)
-        // dispatch(fetchCharacters(data.results))
-      })
-  }, [])
-
-  return (
-    <div className="App">
-        <Routes>
-          {loading ? <Route path="/" element={<RickAndMorty data={characters} loading={loading}/> } />  : "" }
-          <Route path="/card/:id" element={<Card data={characters} />} />
-        </Routes>
-    </div>  
-  );
+    const dispatch = useDispatch();
+    const characters = useSelector((state: any) => state.characters.characters);
+    const loading = useSelector((state: any) => state.characters.isLoading)
+    const currentPage = useSelector((state: any) => state.characters.currentPage)
+    const {fetchCharacters} = useCharacterActions()
+    useEffect(() => {
+        fetchCharacters(currentPage)
+    }, [fetchCharacters])
+    console.log(characters)
+    return (
+        <div className="App">
+            <Routes>
+                <Route path="/" element={<RickAndMorty data={characters} loading={loading}/>}/>
+                <Route path="/card/:id" element={<Card data={characters}/>}/>
+            </Routes>
+        </div>
+    );
 }
 
 export default App;
