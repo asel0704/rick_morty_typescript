@@ -6,7 +6,7 @@ import {
     ALIVE_CHECKBOX,
     DEAD_CHECKBOX,
     UNKNOWN_CHECKBOX,
-    FETCH_CHARACTERS_SUCCESS, FETCH_CHARACTERS_ERROR
+    FETCH_CHARACTERS_SUCCESS, FETCH_CHARACTERS_ERROR, CHANGE_CURRENT_PAGE
 } from "./types"
 import {Dispatch} from 'redux'
 
@@ -15,12 +15,17 @@ export const fetchCharacters = (currentPage: number) => (dispatch: Dispatch<any>
     fetch(`https://rickandmortyapi.com/api/character?page=${currentPage}`)
         .then((res) => res.json())
         .then((res) => {
-            dispatch({type: FETCH_CHARACTERS_SUCCESS, payload: res.results})
+            dispatch({type: FETCH_CHARACTERS_SUCCESS, payload: res})
         }).catch(() => {
         dispatch({type: FETCH_CHARACTERS_ERROR, payload: 'Ошибка при загрузке Rick and Morty characters'})
     })
 }
-
+export const changeCurrentPage = (newPage:number) =>(dispatch:Dispatch<any>) => {
+    dispatch({
+        type: CHANGE_CURRENT_PAGE,
+        payload: newPage
+    })
+}
 export function findCharacters(text: any) {
     return {
         type: SEARCH_CHARACTERS,

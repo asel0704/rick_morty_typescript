@@ -1,36 +1,45 @@
-import {useState, FC} from 'react';
+import {useState, FC, useCallback} from 'react';
 import './../App.css'
 import {Form, Button} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Pagination from './Pagination';
 import {Link} from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar'
 import Container from 'react-bootstrap/Container'
-import Card from "./Card";
+import {useDispatch, useSelector} from "react-redux";
+import Pagination from '@mui/material/Pagination'
+import {useCharacterActions} from "../hooks/useCharacterActions";
+import {styled} from "@mui/material";
 
+const PaginationBlock = styled('div')`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`
 type Props = {
     data: any,
     loading: boolean
 }
 const RickAndMorty: FC<Props> = ({data, loading}) => {
+    const totalPage = useSelector((state: any) => state.characters.totalPage)
+
     const [inputText, setInputText] = useState('');
     const [selectedPersons, setSelectedPersons] = useState(data);
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage, setPostsPerPage] = useState(6);
 
     const [maleCheckbox, setMaleCheckbox] = useState(false);
     const [femaleCheckbox, setFemaleCheckbox] = useState(false);
     const [aliveCheckbox, setAliveCheckbox] = useState(false);
     const [deadCheckbox, setDeadCheckbox] = useState(false);
     const [unknownCheckbox, setUnknownCheckbox] = useState(false);
+    const dispatch = useDispatch()
+    const {fetchCharacters} = useCharacterActions()
 
+    const loadNewPage = useCallback((currentPage: number) => {
+        fetchCharacters(currentPage)
+    }, [dispatch, currentPage]);
     const searchHandler = () => {
         setSelectedPersons(data.filter((item: any) => item.name.toLowerCase().includes(inputText.toLowerCase())));
     }
-
-    const indexOfLastPost = currentPage * postsPerPage;
-    const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = data
 
     const checkboxFilter = (type: any) => {
         if (type === "male") {
@@ -96,9 +105,6 @@ const RickAndMorty: FC<Props> = ({data, loading}) => {
         }
     }
 
-    const paginate = (pageNumber: number) => {
-        setCurrentPage(pageNumber)
-    }
 
     return (
         <div className="films">
@@ -151,7 +157,7 @@ const RickAndMorty: FC<Props> = ({data, loading}) => {
             </div>
             <div className="cards">
                 {
-                    currentPosts.map((item: any) => {
+                    data.map((item: any) => {
                         return (
                             <Link to={`/card/${item.id}`} style={{textDecoration: 'none'}}>
                                 <div key={item.id} className="card">
@@ -181,7 +187,13 @@ const RickAndMorty: FC<Props> = ({data, loading}) => {
                 }
 
             </div>
-            <Pagination postsPerPage={postsPerPage} totalPosts={selectedPersons.length} paginate={paginate}/>
+            {/*<Pagination postsPerPage={postsPerPage} totalPosts={totalPage} paginate={paginate}/>*/}
+            <PaginationBlock>
+                <Pagination count={totalPage} color="primary" onChange={(event: any, value: number) => {
+                    setCurrentPage(value)
+                    loadNewPage(value)
+                }} showFirstButton showLastButton/>
+            </PaginationBlock>
         </div>
     )
 }

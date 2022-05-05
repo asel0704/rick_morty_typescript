@@ -7,7 +7,7 @@ export const DEAD_CHECKBOX = "DEAD_CHECKBOX";
 export const UNKNOWN_CHECKBOX = "UNKNOWN_CHECKBOX";
 export const FETCH_CHARACTERS_SUCCESS = "FETCH_CHARACTERS_SUCCESS"
 export const FETCH_CHARACTERS_ERROR = "FETCH_CHARACTERS_ERROR"
-
+export const CHANGE_CURRENT_PAGE = 'CHANGE_CURRENT_PAGE'
 export type Character = {
     id: number
     created: string | Date
