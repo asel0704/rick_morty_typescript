@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import {Route, Routes} from 'react-router-dom';
 import './App.css';
 import Card from './components/Card'
@@ -10,10 +10,13 @@ const App = () => {
     const characters = useSelector((state: any) => state.characters.characters);
     const loading = useSelector((state: any) => state.characters.isLoading)
     const currentPage = useSelector((state: any) => state.characters.currentPage)
+    const gender = ''
+    const status = ''
+    const name = ''
     const {fetchCharacters} = useCharacterActions()
     useEffect(() => {
-        fetchCharacters(currentPage)
-    }, [fetchCharacters])
+        fetchCharacters(currentPage, gender, status, name)
+    }, [fetchCharacters, currentPage])
     return (
         <div className="App">
             <Routes>

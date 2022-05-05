@@ -9,7 +9,6 @@ const Card = () => {
     const characters = useSelector((state: any) => state.characters.characters);
     const {id} = useParams();
     const [item, setItem] = useState<any>('empty')
-    console.log('id',item)
     useEffect(()=>{
         if (id !== undefined) {
             characters.map((cardItem:any) => {

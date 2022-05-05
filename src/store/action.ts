@@ -10,9 +10,9 @@ import {
 } from "./types"
 import {Dispatch} from 'redux'
 
-export const fetchCharacters = (currentPage: number) => (dispatch: Dispatch<any>) => {
+export const fetchCharacters = (currentPage: number, gender:string,status:string, name:string ) => (dispatch: Dispatch<any>) => {
     dispatch({type: FETCH_CHARACTERS})
-    fetch(`https://rickandmortyapi.com/api/character?page=${currentPage}`)
+    fetch(`https://rickandmortyapi.com/api/character?page=${currentPage}&gender=${gender}&status=${status}&name=${name}`)
         .then((res) => res.json())
         .then((res) => {
             dispatch({type: FETCH_CHARACTERS_SUCCESS, payload: res})

@@ -1,4 +1,4 @@
-import {useState, FC, useCallback} from 'react';
+import {useState, FC, useCallback, useEffect} from 'react';
 import './../App.css'
 import {Form, Button} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -16,95 +16,33 @@ const PaginationBlock = styled('div')`
   width: 100%;
 `
 type Props = {
-    data: any,
+    data:any
     loading: boolean
 }
-const RickAndMorty: FC<Props> = ({data, loading}) => {
+const RickAndMorty: FC<Props> = ({data,loading}) => {
     const totalPage = useSelector((state: any) => state.characters.totalPage)
-
+    let newData = data;
     const [inputText, setInputText] = useState('');
-    const [selectedPersons, setSelectedPersons] = useState(data);
     const [currentPage, setCurrentPage] = useState(1);
-
     const [maleCheckbox, setMaleCheckbox] = useState(false);
     const [femaleCheckbox, setFemaleCheckbox] = useState(false);
     const [aliveCheckbox, setAliveCheckbox] = useState(false);
     const [deadCheckbox, setDeadCheckbox] = useState(false);
     const [unknownCheckbox, setUnknownCheckbox] = useState(false);
+    const [gender, setGender] = useState('')
+    const [status, setStatus] = useState('')
     const dispatch = useDispatch()
     const {fetchCharacters} = useCharacterActions()
 
     const loadNewPage = useCallback((currentPage: number) => {
-        fetchCharacters(currentPage)
+        fetchCharacters(currentPage, gender, status, inputText)
     }, [dispatch, currentPage]);
+    useEffect(() => {
+        fetchCharacters(currentPage, gender, status, inputText)
+    }, [fetchCharacters, currentPage, gender, status, inputText])
     const searchHandler = () => {
-        setSelectedPersons(data.filter((item: any) => item.name.toLowerCase().includes(inputText.toLowerCase())));
+       return newData = data.filter((item: any) => item.name.toLowerCase().includes(inputText.toLowerCase()));
     }
-
-    const checkboxFilter = (type: any) => {
-        if (type === "male") {
-            setMaleCheckbox(!maleCheckbox);
-            setFemaleCheckbox(false);
-            setAliveCheckbox(false);
-            setDeadCheckbox(false);
-            setUnknownCheckbox(false);
-            if (!maleCheckbox) {
-                setSelectedPersons(data.filter((item: any) => item.gender === 'Male'))
-            } else {
-                setSelectedPersons(data)
-            }
-        } else if (type === "female") {
-            setFemaleCheckbox(!femaleCheckbox);
-            setMaleCheckbox(false);
-            setAliveCheckbox(false);
-            setDeadCheckbox(false);
-            setUnknownCheckbox(false);
-            if (!femaleCheckbox) {
-                setSelectedPersons(data.filter((item: any) => item.gender === 'Female'))
-            } else {
-                setSelectedPersons(data)
-            }
-        } else if (type === "alive") {
-            setAliveCheckbox(!aliveCheckbox);
-            setDeadCheckbox(false);
-            setUnknownCheckbox(false);
-            setMaleCheckbox(false);
-            setFemaleCheckbox(false);
-
-            if (!aliveCheckbox) {
-                setSelectedPersons(data.filter((item: any) => item.status === 'Alive'));
-            } else {
-                setSelectedPersons(data)
-            }
-        } else if (type === "dead") {
-            setDeadCheckbox(!deadCheckbox);
-            setUnknownCheckbox(false);
-            setMaleCheckbox(false);
-            setFemaleCheckbox(false);
-            setAliveCheckbox(false);
-
-            if (!deadCheckbox) {
-                setSelectedPersons(data.filter((item: any) => item.status === 'Dead'));
-            } else {
-                setSelectedPersons(data)
-            }
-
-        } else if (type === "unknown") {
-            setUnknownCheckbox(!unknownCheckbox);
-            setDeadCheckbox(false);
-            setMaleCheckbox(false);
-            setFemaleCheckbox(false);
-            setAliveCheckbox(false);
-
-
-            if (!unknownCheckbox) {
-                setSelectedPersons(data.filter((item: any) => item.status === 'unknown'));
-            } else {
-                setSelectedPersons(data)
-            }
-        }
-    }
-
 
     return (
         <div className="films">
@@ -136,28 +74,44 @@ const RickAndMorty: FC<Props> = ({data, loading}) => {
                 <div className="filter__gender">
                     <p>Filter by gender</p>
                     <input type="radio" id="male" name="male" checked={maleCheckbox}
-                           onChange={() => checkboxFilter("male")}/>
+                           onChange={() => {
+                               setStatus('')
+                               setGender('male')
+                           }
+                           }/>
                     <label htmlFor="male" className="me-3">Male</label>
                     <input type="radio" id="Female" name="Female" checked={femaleCheckbox}
-                           onChange={() => checkboxFilter("female")}/>
+                           onChange={() => {
+                               setStatus('')
+                               setGender('female')
+                           }}/>
                     <label htmlFor="Female">Female</label>
                 </div>
                 <div className="filter__status">
                     <p>Filter by status</p>
                     <input type="radio" id="alive" name="alive" checked={aliveCheckbox}
-                           onChange={() => checkboxFilter("alive")}/>
+                           onChange={() => {
+                               setStatus('alive')
+                               setGender('')
+                           }}/>
                     <label htmlFor="alive" className="me-3">Alive</label>
                     <input type="radio" id="dead" name="dead" checked={deadCheckbox}
-                           onChange={() => checkboxFilter("dead")}/>
+                           onChange={() =>{
+                               setStatus('dead')
+                               setGender('')
+                           }}/>
                     <label htmlFor="dead" className="me-3">Dead</label>
                     <input type="radio" id="unknown" name="unknown" checked={unknownCheckbox}
-                           onChange={() => checkboxFilter("unknown")}/>
+                           onChange={() => {
+                               setStatus('unknown')
+                               setGender('')
+                           }}/>
                     <label htmlFor="unknown">Unknown</label>
                 </div>
             </div>
             <div className="cards">
                 {
-                    data.map((item: any) => {
+                    newData.map((item: any) => {
                         return (
                             <Link to={`/card/${item.id}`} style={{textDecoration: 'none'}}>
                                 <div key={item.id} className="card">
