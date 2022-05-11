@@ -1,50 +1,60 @@
-import {FETCH_CHARACTERS, SEARCH_CHARACTERS, MALE_CHECKBOX, FEMALE_CHECKBOX, ALIVE_CHECKBOX,DEAD_CHECKBOX,UNKNOWN_CHECKBOX} from '../types.ts'
+import {
+    FETCH_CHARACTERS,
+    SEARCH_CHARACTERS,
+    MALE_CHECKBOX,
+    FEMALE_CHECKBOX,
+    ALIVE_CHECKBOX,
+    DEAD_CHECKBOX,
+    UNKNOWN_CHECKBOX,
+    FETCH_CHARACTERS_SUCCESS, FETCH_CHARACTERS_ERROR, CHANGE_CURRENT_PAGE
+} from "../types";
+import {ReducerInitState} from "../types";
 
-interface CharactersState{
-    characters: Array<any>,
-    isLoading:boolean
-}
-
-const initialState : CharactersState = {
+const initialState: ReducerInitState = {
     characters: [],
-    isLoading:false
+    isLoading: false,
+    totalPage: 1,
+    currentPage: 1,
 }
 
-export const charactersReducer = (state = initialState, action) => {
-    switch (action.type){
+export const charactersReducer = (state = initialState, action: any) => {
+    switch (action.type) {
         case FETCH_CHARACTERS:
-            return {
-                ...state, characters:action.payload, isLoading:true
-            }
-            break;
+            return {...state, isLoading: true, error: undefined}
+        case FETCH_CHARACTERS_SUCCESS:
+            return {...state, characters: action.payload.results, isLoading: false, totalPage:action.payload.info.pages}
+        case FETCH_CHARACTERS_ERROR:
+            return {...state, error: action.payload, isLoading: false}
+        case CHANGE_CURRENT_PAGE:
+            return {...state, currentPage:action.payload}
         case SEARCH_CHARACTERS:
-            if (action.payload === ""){
+            if (action.payload === "") {
                 return state
             }
             return {
-                ...state, characters : state.characters.filter(item => item.name.toLowerCase().includes(action.payload.toLowerCase()))
+                ...state,
+                characters: state.characters.filter(item => item.name.toLowerCase().includes(action.payload.toLowerCase()))
             }
-            break;
         case MALE_CHECKBOX:
             return {
-                ...state, characters:action.payload.filter(item => item.gender === "Male")
+                ...state, characters: action.payload.filter((item: any) => item.gender === "Male")
             }
-        case FEMALE_CHECKBOX: 
+        case FEMALE_CHECKBOX:
             return {
-                ...state, characters:action.payload.filter(item => item.gender === "Female")
+                ...state, characters: action.payload.filter((item: any) => item.gender === "Female")
             }
         case ALIVE_CHECKBOX:
             return {
-                ...state, characters:action.payload.filter(item => item.status === "Alive")
-            }       
+                ...state, characters: action.payload.filter((item: any) => item.status === "Alive")
+            }
         case DEAD_CHECKBOX:
             return {
-                ...state, characters:action.payload.filter(item => item.status === "Dead")
-            } 
+                ...state, characters: action.payload.filter((item: any) => item.status === "Dead")
+            }
         case UNKNOWN_CHECKBOX:
             return {
-                ...state, characters:action.payload.filter(item => item.status === "unknown")
-            } 
+                ...state, characters: action.payload.filter((item: any) => item.status === "unknown")
+            }
         default:
             return state;
     }
